@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        /* Variáveis Padrão (Dark Mode) */
+        :root {
+            --main-color: #d3ad7f;
+            --text-color: #fff;
+            --background-color: #010103;
+            --card-background-color: #13131a;
+            --border: 0.1rem solid rgba(255, 255, 255, 0.3);
+            --shadow-color: rgba(0, 0, 0, 0.9);
+            font-size: 10px; 
+        }
+
+        /* Variáveis para Light Mode */
+        .light-mode {
+            --main-color: #a0522d; /* Marrom escuro/Terracota */
+            --text-color: #333;
+            --background-color: #f5f5dc; /* Bege claro (Cream) */
+            --card-background-color: #fff;
+            --border: 0.1rem solid rgba(0, 0, 0, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.4);
+        }
+        
+        html {
+            transition: font-size 0.3s ease;
+            scroll-behavior: smooth; 
+        }
+
+        /* ACESSIBILIDADE: Foco visível para navegação por teclado */
+        :focus-visible {
+            outline: 2px solid var(--main-color);
+            outline-offset: 4px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            outline: none;
+            border: none;
+            text-decoration: none;
+            text-transform: capitalize;
+            transition: 0.2s linear;
+            font-family: "Outfit", sans-serif;
+            box-sizing: border-box; 
+        }
+
+        body {
+            background-color: var(--background-color);
+            overflow-x: hidden; 
+        }
+
+        section {
+            padding: 3rem 2rem;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        /* --- ANIMAÇÃO SCROLL REVEAL --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px); 
+            transition: all 1s ease;     
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);    
+        }
+
+        /* HEADER */
+        .header {
+            position: fixed; 
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 99;
+            border-bottom: var(--border);
+            background-color: var(--background-color);
+        }
+
+        .header section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+        }
+
+        .logo img {
+            height: 6rem; 
+            width: auto;
+        }
+
+        .navbar a {
+            margin: 0 1rem;
+            font-size: 1.8rem;
+            color: var(--text-color);
+            display: inline-block; 
+        }
+
+        .navbar a:hover {
+            color: var(--main-color);
+            border-bottom: 0.1rem solid var(--main-color);
+            padding-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .icons img, .icons i {
+            width: 3.5rem;
+            height: 3.5rem;
+            margin: 0 0.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem; 
+        }
+        
+        .icons #menu-btn {
+            display: none; 
+        }
+        
+        .icons i:hover {
+            color: var(--main-color);
+        }
+        
+        .icons img:hover {
+            opacity: 0.8;
+        }
+
+        .btn {
+            background-color: var(--main-color);
+            color: #fff; /* O texto do botão deve ser branco para contraste */
+            padding: 1rem 3rem;
+            font-size: 1.7rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            display: inline-block;
+            border-radius: 0.5rem;
+        }
+
+        .btn:hover {
+            letter-spacing: 0.1rem;
+        }
+        
+        /* HOME - COM PARALLAX E CONTRASTE MELHORADO */
+        .home-container {
+            /* Fundo da imagem escurecido no Dark Mode */
+            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url("imgs/cafe.PNG");
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed; 
+            margin-top: 8rem; 
+        }
+        
+        /* Ajuste do contraste da Home no Light Mode */
+        .light-mode .home-container {
+            /* Fundo da imagem clareado no Light Mode */
+            background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url("imgs/cafe.PNG");
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        .home-container section {
+            display: flex;
+            align-items: center;
+            min-height: calc(100vh - 8rem);
+        }
+
+        .content {
+            max-width: 60rem;
+        }
+
+        .content h1 {
+            color: var(--text-color);
+            font-size: 6rem;
+            line-height: 1.2;
+            text-shadow: 2px 2px 5px var(--shadow-color);
+        }
+
+        .content p {
+            color: var(--text-color);
+            font-size: 2rem;
+            line-height: 1.8;
+            margin-top: 1rem;
+            padding: 1rem 0;
+            text-shadow: 1px 1px 3px var(--shadow-color);
+        }
+        
+        /* TÍTULOS DE SEÇÃO */
+        .title {
+            font-size: 4rem;
+            color: var(--main-color);
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+            text-shadow: 2px 2px 4px var(--shadow-color);
+        }
+
+        .title span {
+            color: var(--text-color);
+            text-transform: uppercase;
+        }
+
+        /* SOBRE NÓS */
+        .about .row {
+            display: flex;
+            align-items: center;
+            background-color: var(--card-background-color);
+            gap: 1.5rem;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            flex-wrap: nowrap; 
+        }
+        
+        .about .row .container-img {
+            flex: 1 1 50%; 
+            position: relative;
+            overflow: hidden;
+            min-height: 400px;
+        }
+
+        /* CARROSSEL */
+        .carousel-inner {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-inner img {
+            min-width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            /* Cores que funcionam nos dois modos */
+            background-color: rgba(0, 0, 0, 0.6); 
+            color: #fff;
+            font-size: 2rem;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 10;
+        }
+        
+        .light-mode .carousel-btn {
+             background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .carousel-btn:hover {
+            background-color: var(--main-color);
+            color: var(--text-color);
+        }
+
+        .prev-btn { left: 1rem; }
+        .next-btn { right: 1rem; }
+
+        .about .row .content {
+            flex: 1 1 50%; 
+            padding: 2rem;
+        }
+
+        .about .row .content h3 {
+            font-size: 3rem;
+            color: var(--main-color);
+            text-shadow: 1px 1px 3px var(--shadow-color);
+        }
+
+        .about .row .content p {
+            font-size: 2rem;
+            color: var(--text-color); 
+            padding: 1rem 0;
+            line-height: 1.6;
+        }
+        
+        .light-mode .about .row .content p {
+            color: #555; /* Texto mais escuro para melhor legibilidade no Light Mode */
+        }
+
+        /* MENU */
+        .menu .box-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+            gap: 1.5rem;
+        }
+
+        .menu .box-container .box {
+            text-align: center;
+            border: var(--border);
+            padding: 5rem 2rem;
+            border-radius: 0.5rem;
+            transition: transform 0.3s ease; 
+            background-color: var(--card-background-color);
+        }
+        
+        /* Efeito visual ao passar o mouse */
+        .menu .box-container .box:hover {
+            background-color: var(--main-color);
+            transform: scale(1.02); 
+        }
+
+        .menu .box-container .box img {
+            height: 10rem;
+        }
+
+        .menu .box-container .box h3,
+        .menu .box-container .box .price {
+            color: var(--text-color);
+            font-size: 2rem;
+            padding: 1rem 0;
+        }
+        
+        .menu .box-container .box .price {
+            font-size: 2.5rem;
+            padding: 0.5rem 0;
+        }
+
+        .menu .box-container .box span {
+            font-size: 1.5rem;
+            text-decoration: line-through;
+            font-weight: lighter;
+            color: #aaa; 
+        }
+
+        /* Ajuste de contraste ao hover no menu (fundo main-color) */
+        .menu .box-container .box:hover>* {
+            color: var(--background-color); /* Fundo da main color */
+        }
+        
+        .menu .box-container .box:hover span {
+            color: var(--background-color); 
+            opacity: 0.7;
+        }
+
+        /* AVALIAÇÕES */
+        .review .box-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+            gap: 1.5rem;
+        }
+
+        .review .box {
+            text-align: center;
+            border: var(--border);
+            padding: 2.5rem;
+            background-color: var(--card-background-color);
+            border-radius: 0.5rem;
+        }
+        
+        .review .box img:first-child {
+            height: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .review .box p {
+            color: var(--text-color); 
+            font-size: 1.6rem;
+            margin: 1rem 0;
+            line-height: 1.5;
+        }
+        
+        .light-mode .review .box p {
+            color: #555; 
+        }
+
+        .review .box h3 {
+            color: var(--main-color);
+            margin-top: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .review .box .star img {
+            height: 2.5rem;
+            width: 2.5rem;
+        }
+        
+        .review .box img:nth-child(3) {
+            height: 7rem;
+            width: 7rem;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 0.1rem solid var(--main-color);
+        }
+
+        /* LOCALIZAÇÃO */
+        .local {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 5rem;
+        }
+
+        .local h3 {
+            font-size: 3.5rem;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+        }
+
+        .local span {
+            font-size: 3.5rem;
+            color: var(--main-color);
+        }
+        
+        .local iframe {
+            width: 100%; 
+            height: 40rem;
+            border-radius: 0.5rem;
+            max-width: 900px;
+            /* Cor da borda do iframe para ambos os modos */
+            border: 0.1rem solid var(--main-color) !important; 
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            border-top: var(--border);
+            padding-top: 3rem;
+        }
+
+        .footer .share {
+            padding: 1rem 0;
+        }
+
+        .footer .share i {
+            width: 4.8rem;
+            height: 4.8rem;
+            margin: 0.5rem;
+            cursor: pointer;
+            border-radius: 50%;
+            padding: 1rem;
+            background-color: var(--card-background-color);
+            font-size: 2rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+        }
+
+        .footer .share i:hover {
+            background-color: var(--main-color);
+        }
+
+        /* MEDIA QUERIES */
+        @media (max-width: 991px) {
+            .header section {
+                padding: 1.5rem 2rem;
+            }
+            section {
+                padding: 2rem;
+            }
+            .title {
+                font-size: 3rem;
+                margin-bottom: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .icons #menu-btn {
+                display: flex; 
+            }
+            
+            .navbar {
+                position: absolute;
+                top: 100%; 
+                left: 0;
+                right: 0;
+                background: var(--card-background-color);
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 1rem 0;
+            }
+            
+            .navbar.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+
+            .navbar a {
+                display: block;
+                margin: 1.5rem;
+                padding: 0.5rem;
+                font-size: 2.2rem; 
+                text-align: center;
+            }
+            
+            .home-container section {
+                 min-height: calc(100vh - 8rem);
+                 justify-content: center;
+                 text-align: center;
+            }
+            
+            .content h1 {
+                font-size: 4rem; 
+            }
+
+            .content p {
+                font-size: 1.6rem;
+            }
+
+            .about .row {
+                flex-direction: column; 
+            }
+            
+            .about .row .content {
+                text-align: center;
+            }
+
+            .local iframe {
+                height: 30rem;
+            }
+            
+            .home-container {
+                background-attachment: scroll; 
+            }
+        }
+
+        @media (max-width: 450px) {
+            .content h1 {
+                font-size: 3rem; 
+            }
+            
+            .btn {
+                font-size: 1.5rem;
+                padding: 0.8rem 2.5rem;
+            }
+            
+            .local h3, .local span {
+                font-size: 2.8rem;
+            }
+        }
+    </style>
+</head>
+<body id="body">
+    <header class="header">
+        <section>
+        <a href="#" class="logo">
+            <img src="imgs/unnamed.png" alt="logo">
+        </a>
+
+        <nav class="navbar" id="navbar">
+            <a href="#">Home</a>
+            <a href="#about">Sobre</a>
+            <a href="#menu">Menu</a>
+            <a href="#review">Avaliações</a>
+            <a href="#local">Localização</a>
+        </nav>
+
+        <div class="icons">
+            <i class="fa-solid fa-moon" id="theme-toggle" title="Alternar tema" tabindex="0" aria-label="Alternar entre modo claro e escuro"></i>
+            <i class="fa-solid fa-minus" id="btn-decrease" title="Diminuir Letra" tabindex="0" aria-label="Diminuir fonte"></i>
+            <i class="fa-solid fa-plus" id="btn-increase" title="Aumentar Letra" tabindex="0" aria-label="Aumentar fonte"></i>
+            <i class="fa-solid fa-magnifying-glass" title="Pesquisar" tabindex="0" aria-label="Pesquisar"></i>
+            <i class="fa-solid fa-cart-shopping" title="Carrinho" tabindex="0" aria-label="Carrinho de Compras"></i>
+            <i class="fa-solid fa-bars" id="menu-btn" title="Menu" tabindex="0" aria-label="Abrir Menu"></i>
+        </div>
+        </section>
+    </header>
+
+   <div class="home-container">
+    <section id="home">
+      <div class="content reveal">
+        <h1>
+          PROGRAMANDO <br>
+          TOMANDO COM O <br>
+          MELHOR CAFÉ <br>
+          DA REGIÃO
+        </h1>
+
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. O melhor sabor para o seu dia.</p>
+        <a href="#" class="btn">Pegue o seu AGORA</a>
+      </div>
+    </section>
+  </div>
+
+  <section class="about" id="about">
+    <h2 class="title reveal">Sobre <span>nós</span></h2>
+    <div class="row reveal">
+        
+      <div class="container-img">
+        <div class="carousel-inner">
+            <img src="imgs/cafe2.PNG" alt="Nossa cafeteria interior aconchegante">
+            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80" alt="Ambiente com mesas de madeira e luz suave">
+            <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80" alt="Grãos de café torrados em detalhe">
+        </div>
+        <button class="carousel-btn prev-btn" aria-label="Imagem Anterior"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="carousel-btn next-btn" aria-label="Próxima Imagem"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+
+      <div class="content">
+        <h3>O que faz o nosso café especial?</h3>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Oferecemos grãos selecionados e um ambiente perfeito para trabalho e lazer.</p>
+        <a href="#" class="btn">Saiba mais</a>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="menu" id="menu">
+    <h2 class="title reveal">NOSSO <span>MENU</span></h2>
+ 
+  <div class="box-container reveal">
+    <div class="box">
+      <img src="imgs/cafecomleite1.png" alt="Xícara de café coado fumegante">
+      <h3>Café coado</h3>
+      <div class="price">R$12,99 <span>R$15,99</span></div>
+      <a href="#" class="btn">Adicione ao Carrinho</a>
+    </div>
+
+    <div class="box">
+      <img src="imgs/cafecomleite2.png" alt="Copo de café com leite cremoso">
+      <h3>Café com leite</h3>
+      <div class="price">R$9,99 <span>R$12,99</span></div>
+      <a href="#" class="btn">Adicione ao Carrinho</a>
+    </div>
+
+    <div class="box">
+      <img src="imgs/cafecomleite3.png" alt="Xícara de cappuccino com arte no leite">
+      <h3>Cappuccino</h3>
+      <div class="price">R$6,00 <span>R$12,00</span></div>
+      <a href="#" class="btn">Adicione ao Carrinho</a>
+    </div>
+
+    <div class="box">
+      <img src="imgs/cafecomleite4.png" alt="Café puro sem açúcar">
+      <h3>Café sem açúcar</h3>
+      <div class="price">R$13,00 <span>R$15,99</span></div>
+      <a href="#" class="btn">Adicione ao Carrinho</a>
+    </div>
+
+    <div class="box">
+      <img src="imgs/cafecomleite5.png" alt="Café tradicional">
+      <h3>Café normal</h3>
+      <div class="price">R$17,99 <span>R$30,99</span></div>
+      <a href="#" class="btn">Adicione ao Carrinho</a>
+    </div>
+      </div>
+    </section>
+
+    <section class="review" id="review">
+      <h2 class="title reveal">NOSSOS <span>CLIENTES</span></h2>
+      <div class="box-container reveal">
+
+        <div class="box">
+          <img src="https://img.icons8.com/ios-filled/50/d3ad7f/quote-left.png" alt="ícone de aspas">
+          <p>O melhor café que já provei na minha vida! Ambiente incrível.</p>
+          <img src="imgs/pessoa1.png" alt="Foto da cliente Giovanna sorrindo">
+          <h3>Giovanna</h3>
+          <div class="star">
+            <img src="https://img.icons8.com/fluency/30/star.png" alt="estrela de avaliação"/>
+            <img src="https://img.icons8.com/fluency/30/star.png" alt="estrela de avaliação"/>
+            <img src="https://img.icons8.com/fluency/30/star.png" alt="estrela de avaliação"/>
+            <img src="https://img.icons8.com/fluency/30/star.png" alt="estrela de avaliação"/>
+            <img src="https://img.icons8.com/fluency/30/star.png" alt="estrela de avaliação"/>
+          </div>
+        </div>
+
+        <div class="box">
+          <img src="https://img.icons8.com/ios-filled/50/d3ad7f/quote-left.png" alt="ícone de aspas">
+          <p>Vale super a pena o preço pela qualidade oferecida.</p>
+          <img src="imgs/pessoa2.png" alt="Foto do cliente Roberto">
+          <h3>Roberto</h3>
+          <div class="star">
+            <img src="https://img.icons8.com/fluency/30/star.png" alt="estrela de avaliação"/>
+            <img src="https://img.icons8.com/fluency/30/star.png" alt="estrela de avaliação"/>
+            <img src="https://img.icons8.com/fluency/30/star.png" alt="estrela de avaliação"/>
+            <img src="https://img.icons8.com/fluency/30/star.png" alt="estrela de avaliação"/>
+            <img src="https://img.icons8.com/fluency/30/star.png" alt="estrela de avaliação"/>
+          </div>
+        </div>
+
+        <div class="box">
+          <img src="https://img.icons8.com/ios-filled/50/d3ad7f/quote-left.png" alt="ícone de aspas">
+          <p>Adoro programar nessa cafeteria! Wi-fi rápido e café quente.</p>
+          <img src="imgs/pessoa3.png" alt="Foto do cliente Alexandre">
+          <h3>Alexandre</h3>
+          <div class="star">
+            <img src="https://img.icons8.com/fluency/30/star.png" alt="estrela de avaliação"/>
+            <img src="https://img.icons8.com/fluency/30/star.png" alt="estrela de avaliação"/>
+            <img src="https://img.icons8.com/fluency/30/star.png" alt="estrela de avaliação"/>
+            <img src="https://img.icons8.com/fluency/30/star.png" alt="estrela de avaliação"/>
+            <img src="https://img.icons8.com/fluency/30/star.png" alt="estrela de avaliação"/>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="local reveal" id="local">
+      <h3>NOSSO<span>ENDEREÇO</span></h3>
+      <iframe title="Mapa de localização da cafeteria" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3839.253517876753!2d-47.934654025695174!3d-15.790580822859509!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935a31c0a2ff61bd%3A0xb89f4d5a24b2aca6!2sCalmaria%20caf%C3%A9!5e0!3m2!1spt-PT!2sbr!4v1756336789698!5m2!1spt-PT!2sbr" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </section>
+
+    <section class="footer">
+      <div class="share">
+        <i class="fa-brands fa-instagram" style="color: #fff; background-color: #E1306C;" aria-label="Instagram"></i>
+        <i class="fa-brands fa-facebook-f" style="color: #fff; background-color: #3b5998;" aria-label="Facebook"></i>
+        <i class="fa-brands fa-twitter" style="color: #fff; background-color: #1da1f2;" aria-label="Twitter"></i>
+      </div>
+    </section>
+
+    <script>
+        // MENU MOBILE
+        const menuBtn = document.querySelector('#menu-btn');
+        const navbar = document.querySelector('#navbar');
+        
+        const toggleMenu = () => {
+            navbar.classList.toggle('active');
+        };
+
+        menuBtn.addEventListener('click', toggleMenu);
+        
+        document.querySelectorAll('.navbar a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navbar.classList.contains('active')) {
+                    navbar.classList.remove('active');
+                }
+            });
+        });
+
+        window.onresize = () => {
+            if (window.innerWidth > 768 && navbar.classList.contains('active')) {
+                 navbar.classList.remove('active');
+            }
+        };
+        
+        // ----------------------------------------------------
+        // LÓGICA DARK/LIGHT MODE
+        // ----------------------------------------------------
+        const body = document.getElementById('body');
+        const themeToggle = document.getElementById('theme-toggle');
+
+        // 1. Aplica o tema salvo ou o padrão do sistema (se houver)
+        function applyTheme(theme) {
+            if (theme === 'light') {
+                body.classList.add('light-mode');
+                themeToggle.classList.replace('fa-moon', 'fa-sun');
+                themeToggle.setAttribute('title', 'Alternar para modo escuro');
+            } else {
+                body.classList.remove('light-mode');
+                themeToggle.classList.replace('fa-sun', 'fa-moon');
+                themeToggle.setAttribute('title', 'Alternar para modo claro');
+            }
+        }
+
+        // 2. Tenta carregar a preferência do usuário (se existir)
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            applyTheme(savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+            // Se não houver preferência salva, verifica o tema do sistema
+            applyTheme('light'); 
+        } else {
+            // Padrão: Dark
+            applyTheme('dark');
+        }
+
+        // 3. Função de alternância ao clicar
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.classList.contains('light-mode') ? 'light' : 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            applyTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // ----------------------------------------------------
+        // OUTRAS LÓGICAS (Zoom e Carrossel mantidas)
+        // ----------------------------------------------------
+
+        // SCROLL SUAVE
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                if (navbar.classList.contains('active')) {
+                    navbar.classList.remove('active');
+                }
+            });
+        });
+
+        // ZOOM FONTE
+        const rootElement = document.documentElement;
+        const btnIncrease = document.getElementById('btn-increase');
+        const btnDecrease = document.getElementById('btn-decrease');
+
+        let currentFontSize = parseFloat(localStorage.getItem('fontSize')) || 10;
+
+        function applyFontSize(size) {
+            rootElement.style.fontSize = `${size}px`;
+            localStorage.setItem('fontSize', size); 
+        }
+        applyFontSize(currentFontSize);
+
+        btnIncrease.addEventListener('click', () => {
+            if (currentFontSize < 13) { 
+                currentFontSize += 1;
+                applyFontSize(currentFontSize);
+            } else {
+                alert("Tamanho máximo atingido!");
+            }
+        });
+
+        btnDecrease.addEventListener('click', () => {
+            if (currentFontSize > 8) { 
+                currentFontSize -= 1;
+                applyFontSize(currentFontSize);
+            } else {
+                alert("Tamanho mínimo atingido!");
+            }
+        });
+
+        // LÓGICA DO CARROSSEL
+        const carouselInner = document.querySelector('.carousel-inner');
+        const slides = document.querySelectorAll('.carousel-inner img');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        
+        let currentIndex = 0;
+        const intervalTime = 5000; 
+        let slideInterval;
+
+        function updateCarousel() {
+            carouselInner.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        function nextSlide() {
+            currentIndex++;
+            if (currentIndex >= slides.length) {
+                currentIndex = 0; 
+            }
+            updateCarousel();
+            resetInterval(); 
+        }
+
+        function prevSlide() {
+            currentIndex--;
+            if (currentIndex < 0) {
+                currentIndex = slides.length - 1; 
+            }
+            updateCarousel();
+            resetInterval();
+        }
+
+        function startInterval() {
+            slideInterval = setInterval(nextSlide, intervalTime);
+        }
+
+        function resetInterval() {
+            clearInterval(slideInterval);
+            startInterval();
+        }
+
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+        window.addEventListener('resize', updateCarousel);
+        startInterval();
+
+        // LÓGICA DE SCROLL REVEAL (ANIMAÇÃO AO ROLAR)
+        function reveal() {
+            var reveals = document.querySelectorAll('.reveal');
+
+            for (var i = 0; i < reveals.length; i++) {
+                var windowheight = window.innerHeight;
+                var revealtop = reveals[i].getBoundingClientRect().top;
+                var revealpoint = 100;
+
+                if (revealtop < windowheight - revealpoint) {
+                    reveals[i].classList.add('active');
+                }
+            }
+        }
+
+        window.addEventListener('scroll', reveal);
+        reveal();
+
+    </script>
+</body>
+</html>
